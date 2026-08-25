@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #fbf8f8;
+    color: #2f2529;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+/* Shared surfaces retain the existing component geometry without the neon treatment. */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #eadde1;
+}
+
+.glass-panel-hover {
+  transition: all 0.2s ease-in-out;
+}
+.glass-panel-hover:hover {
+  border-color: rgba(183, 55, 90, 0.35);
+  box-shadow: 0 8px 24px -16px rgba(159, 41, 75, 0.35);
+}
+
+.glow-brand {
+  box-shadow: 0 12px 28px -18px rgba(159, 41, 75, 0.4);
+}
+
+.glow-emerald {
+  box-shadow: 0 8px 20px -16px rgba(35, 132, 91, 0.3);
+}
+
+/* Highlight styling for search matches */
+mark.search-highlight {
+  background-color: #ffe0e7;
+  color: #84213d;
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.25rem;
+  font-weight: 600;
+  border: 1px solid #f0a5b6;
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f5edef;
+}
+::-webkit-scrollbar-thumb {
+  background: #d7c3ca;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #bfa6af;
+}
