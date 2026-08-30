@@ -13,6 +13,15 @@ const STOP_WORDS = new Set([
   'all', 'any', 'some', 'both', 'each', 'more', 'most', 'other', 'so', 'then'
 ]);
 
+// Minimum cosine similarity required before a chunk is even considered a
+// candidate semantic match. Below this the match is statistically noise
+// (unrelated text in this index clusters around ~0.50–0.56).
+const MIN_SEMANTIC_SIMILARITY = 0.6;
+
+// Below this relevance score a result is treated as a weak / fabricated match
+// and is dropped entirely rather than shown as a misleading ~50% hit.
+const MIN_RELEVANCE = 50;
+
 /**
  * Extracts meaningful search keywords and clean phrases from a natural query.
  * e.g. "Find my Java Chapter 1 PDF" -> cleanQuery: "java chapter 1", terms: ["java", "chapter", "1"]
@@ -100,12 +109,15 @@ export async function searchDocuments(userId, rawQuery) {
 
               const similarity = chunk.similarity || 0;
               const combinedScore = chunk.combined_score || 0;
+
+              if (similarity < MIN_SEMANTIC_SIMILARITY) continue;
+
               const snippet = extractContextualSnippet(chunk.content, terms);
               
               // Relevance is a ranking signal, not a probability.
               const relevance = Math.min(
                 99,
-                Math.max(45, Math.round(similarity > 0 ? similarity * 100 : 40 + combinedScore * 30))
+                 Math.max(MIN_RELEVANCE, Math.round(similarity > 0 ? similarity * 100 : 40 + combinedScore * 30))
               );
 
               // Formulate explainable match reasoning
